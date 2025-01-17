@@ -297,7 +297,7 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 
 		backgroundSprite.setPosition(view.getCenter());
 		background2Sprite.setPosition(view.getCenter());
-		if (numberLevel == 3 || numberLevel == 6)
+		if (numberLevel == 3)
 			window.draw(background2Sprite);
 		else
 			window.draw(backgroundSprite);

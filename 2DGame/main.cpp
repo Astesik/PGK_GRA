@@ -14,7 +14,7 @@ int main()
 	fin >> numberLevel;
 	if (menu(window) == 1)
 	{
-		numberLevel = 1;
+		numberLevel = 3;
 
 		std::ofstream fout2("res/save.txt", std::ios_base::trunc);
 		fout2.close();
