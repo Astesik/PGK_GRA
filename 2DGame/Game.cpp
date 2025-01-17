@@ -200,21 +200,27 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 						if ((*it)->isDead != true)
 						{
 							p.dy = -0.3;
-							killSound.play();
-							(*it)->isDead = true;
+							
+							(*it)->isDead = true;killSound.play();
 						}
 					}
 					else
 					{
 						if ((*it)->dx < 0)
 						{
-							(*it)->dx = 0;
-							p.isDead = true;
+							//(*it)->dx = 0;
+							if (p.lifeCooldown <= 0.0f) {
+								p.minusLife(); p.lifeCooldown = 400;
+								killSound.play();
+							}
 						}
 						if ((*it)->dx > 0)
 						{
-							(*it)->dx = 0;
-							p.isDead = true;
+							//(*it)->dx = 0;
+							if (p.lifeCooldown <= 0.0f) {
+								p.minusLife(); p.lifeCooldown = 400;
+								killSound.play();
+							}
 						}
 					}
 				}
@@ -245,15 +251,14 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 
 				return false;
 			}
-			if ((((*it)->Name == "BlueBall") || ((*it)->Name == "Fireball")) && ((*it)->getRect().intersects(p.getRect())))
-			{
-				p.isDead = true;
-			}
 			if (((*it)->Name == "Spikes") && ((*it)->getRect().intersects(p.getRect())))
 			{
 				if ((p.x - ((*it)->x)) <= -1.5 || (p.x - ((*it)->x)) >= 1.5)
 				{
-					p.isDead = true;
+					if (p.lifeCooldown <= 0.0f) {
+						p.minusLife(); p.lifeCooldown = 400;
+						killSound.play();
+					}
 				}
 			}
 			if (((*it)->Name == "Coin") && ((*it)->getRect().intersects(p.getRect())))
@@ -277,6 +282,7 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 							(*it)->anim.set("moveRight");
 					}
 			}
+			if (p.getLife() <= 0) p.isDead = true;
 			if (p.isDead == true)
 			{
 				CheckX = p.sx;
@@ -305,13 +311,13 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 
 		std::ostringstream playerCash;  
 		playerCash << p.cash;		
-		text.setString("COINS " + playerCash.str());
+		text.setString("COINS " + playerCash.str() );
 		text.setPosition(view.getCenter().x + 215, view.getCenter().y - 240);
 
 		window.draw(text);
 
 		std::ostringstream playerLife;   
-		playerLife << 3;		
+		playerLife << p.getLife();
 		text.setString("LIFE " + playerLife.str());
 		text.setPosition(view.getCenter().x -315, view.getCenter().y - 240);
 

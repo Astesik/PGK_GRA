@@ -6,6 +6,8 @@ Player::Player(AnimationManager &a, Level &lev, int x, int y) :Entity(a, x, y)
 	STATE = stay;
 	cash = 0;
 	obj = lev.GetAllObjects();
+	life = 3;
+	lifeCooldown = 0.0f;
 }
 
 void Player::Keyboard()
@@ -72,6 +74,8 @@ void Player::update(float time)
 	y += dy * time;
 	Collision(1);
 
+	if (lifeCooldown > 0.0f) lifeCooldown -= time;
+
 }
 
 void Player::Collision(int num)
@@ -116,4 +120,13 @@ void Player::Collision(int num)
 			}
 
 		}
+}
+
+int Player::getLife()
+{
+	return life;
+}
+
+void Player::minusLife() {
+	life--;
 }

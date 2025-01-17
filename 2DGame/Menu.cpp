@@ -115,6 +115,7 @@ void end(sf::RenderWindow & window, int& numberLevel)
 	Texture endTexture;
 	endTexture.loadFromFile("res/images/end.jpg");
 
+	
 	Sprite end(endTexture);
 	bool isMenu = 1;
 
@@ -170,17 +171,8 @@ void text(sf::RenderWindow & window, int &numberLevel)
 			window.draw(two);
 		if (numberLevel == 3)
 			window.draw(three);
-		if (numberLevel == 4)
-			window.draw(four);
-		if (numberLevel == 5)
-			window.draw(five);
-		if (numberLevel == 6)
-			window.draw(six);
-		if (numberLevel == 7)
-			window.draw(seven);
 
 		window.display();
 	}
 
 }
-
