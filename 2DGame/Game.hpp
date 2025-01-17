@@ -16,8 +16,6 @@
 #include "Coin.hpp"
 #include "Player.hpp"
 #include "Enemy.hpp"
-#include "BlueBall.hpp"
-#include "FireBall.hpp"
 #include "MovingPlatform.hpp"
 #include "MovingPlatformY.hpp"
 #include "NextLevel.hpp"

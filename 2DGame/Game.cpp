@@ -101,7 +101,7 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 
 	Font font;
 	font.loadFromFile("res/7526.ttf");
-	Text text("", font, 20);
+	Text text("", font, 30);
 	text.setFillColor(Color(218, 165, 32));
 
 	std::list<Entity*>  entities;
@@ -312,14 +312,14 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 		std::ostringstream playerCash;  
 		playerCash << p.cash;		
 		text.setString("COINS " + playerCash.str() );
-		text.setPosition(view.getCenter().x + 215, view.getCenter().y - 240);
+		text.setPosition(view.getCenter().x + 175, view.getCenter().y - 240);
 
 		window.draw(text);
 
 		std::ostringstream playerLife;   
 		playerLife << p.getLife();
 		text.setString("LIFE " + playerLife.str());
-		text.setPosition(view.getCenter().x -315, view.getCenter().y - 240);
+		text.setPosition(view.getCenter().x -305, view.getCenter().y - 240);
 
 		window.draw(text);
 

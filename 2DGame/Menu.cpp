@@ -24,7 +24,7 @@ int menu(sf::RenderWindow & window)
 	back.loadFromFile("res/sound/return.wav");
 	Sound backSound(back);
 
-	Texture menuTexture1, menuTexture2, menuTexture3, menuTexture4, menuTexture5, aboutTexture, keyTexture, menuBackground;
+	Texture menuTexture1, menuTexture2, menuTexture3, menuTexture4, menuTexture5, infoTexture, keyTexture, menuBackground;
 	menuTexture1.loadFromFile("res/images/111.png");
 	menuTexture2.loadFromFile("res/images/222.png");
 	menuTexture3.loadFromFile("res/images/333.png");
@@ -32,10 +32,10 @@ int menu(sf::RenderWindow & window)
 	menuTexture5.loadFromFile("res/images/555.png");
 
 	keyTexture.loadFromFile("res/images/controls.png");
-	aboutTexture.loadFromFile("res/images/about.png");
+	infoTexture.loadFromFile("res/images/info.png");
 	menuBackground.loadFromFile("res/images/fon.jpg");
 
-	Sprite menu1(menuTexture1), menu2(menuTexture2), menu3(menuTexture3), menu4(menuTexture4), menu5(menuTexture5), about(aboutTexture), key(keyTexture), menuBg(menuBackground);
+	Sprite menu1(menuTexture1), menu2(menuTexture2), menu3(menuTexture3), menu4(menuTexture4), menu5(menuTexture5), info(infoTexture), key(keyTexture), menuBg(menuBackground);
 	bool isMenu = 1;
 	int menuNum = 0;
 	sf::Color color(255, 168, 65);
@@ -87,7 +87,7 @@ int menu(sf::RenderWindow & window)
 			if (menuNum == 1) { newgame = 1; isMenu = false; }
 			if (menuNum == 2) { window.draw(key); window.display(); while (!Keyboard::isKeyPressed(Keyboard::Escape)); if (Keyboard::isKeyPressed(Keyboard::Escape))backSound.play(); }
 			if (menuNum == 3) { exit(0); }
-			if (menuNum == 4) { window.draw(about); window.display(); while (!Keyboard::isKeyPressed(Keyboard::Escape)); if (Keyboard::isKeyPressed(Keyboard::Escape))backSound.play(); }
+			if (menuNum == 4) { window.draw(info); window.display(); while (!Keyboard::isKeyPressed(Keyboard::Escape)); if (Keyboard::isKeyPressed(Keyboard::Escape))backSound.play(); }
 			if (menuNum == 5) { isMenu = false; }
 		}
 
