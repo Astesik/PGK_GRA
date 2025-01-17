@@ -6,7 +6,7 @@ Player::Player(AnimationManager &a, Level &lev, int x, int y) :Entity(a, x, y)
 	STATE = stay;
 	cash = 0;
 	obj = lev.GetAllObjects();
-	life = 3;
+	life = 999;
 	lifeCooldown = 0.0f;
 }
 
