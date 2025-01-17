@@ -3,22 +3,19 @@
 float CheckX = 0, CheckY = 0;
 bool RunGame(RenderWindow &window, int &numberLevel)
 {
-	///////////// инициализация ///////////////////////////
-
 	View view(FloatRect(0, 0, 640, 480));
 
 	Level lvl;
 
-
 	SoundBuffer kill;
-	kill.loadFromFile("res/sound/YUH.wav");
+	kill.loadFromFile("res/sound/damage.wav");
 	Sound killSound(kill);
-	killSound.setVolume(30);
+	killSound.setVolume(50);
 
 	SoundBuffer coin;
 	coin.loadFromFile("res/sound/coin.ogg");
 	Sound coinSound(coin);
-	coinSound.setVolume(20);
+	coinSound.setVolume(10);
 
 	changeLevel(lvl, numberLevel);
 
@@ -72,18 +69,6 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 	movePlatformTextureY.setSmooth(true);
 	movePlatformTextureY.loadFromImage(movePlatformImageY);
 
-	Image blueBallImage;
-	blueBallImage.loadFromFile("res/images/BlueBall.png");
-	Texture blueBallTexture;
-	blueBallTexture.setSmooth(true);
-	blueBallTexture.loadFromImage(blueBallImage);
-
-	Image fireBallImage;
-	fireBallImage.loadFromFile("res/images/FireBall.png");
-	Texture fireBallTexture;
-	fireBallTexture.setSmooth(true);
-	fireBallTexture.loadFromImage(fireBallImage);
-
 	Image coinImage;
 	coinImage.loadFromFile("res/images/bitcoin.png");
 	Texture coinTexture;
@@ -111,19 +96,13 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 	AnimationManager anim6;
 	anim6.loadFromXML("res/movingPlatformY.xml", movePlatformTextureY);
 
-	AnimationManager anim7;
-	anim7.loadFromXML("res/BlueBall.xml", blueBallTexture);
-
-	AnimationManager anim8;
-	anim8.loadFromXML("res/FireBall.xml", fireBallTexture);
-
 	AnimationManager anim9;
 	anim9.loadFromXML("res/Coin.xml", coinTexture);
 
 	Font font;
 	font.loadFromFile("res/7526.ttf");
-	Text text("", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
-	text.setFillColor(Color(218, 165, 32));//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+	Text text("", font, 20);
+	text.setFillColor(Color(218, 165, 32));
 
 	std::list<Entity*>  entities;
 	std::list<Entity*>::iterator it;
@@ -153,14 +132,6 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 	for (int i = 0; i < e.size(); i++)
 		entities.push_back(new MovingPlatformY(anim6, lvl, e[i].rect.left, e[i].rect.top));
 
-	e = lvl.GetObjects("BlueBall");
-	for (int i = 0; i < e.size(); i++)
-		entities.push_back(new blueBall(anim7, lvl, e[i].rect.left, e[i].rect.top));
-
-	e = lvl.GetObjects("FireBall");
-	for (int i = 0; i < e.size(); i++)
-		entities.push_back(new fireBall(anim8, lvl, e[i].rect.left, e[i].rect.top));
-
 
 	Object pl = lvl.GetObject("player");
 	Player p(anim, lvl, pl.rect.left, pl.rect.top);
@@ -169,18 +140,17 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 		p.y = CheckY;
 	}
 
-	std::ifstream fin("res/utilityx64.txt");
+	std::ifstream fin("res/save.txt");
 	fin >> p.cash;
 
 	Clock clock;
 
-	/////////////////// основной цикл  /////////////////////
 	while (window.isOpen())
 	{
 		float time = clock.getElapsedTime().asMicroseconds();
 		clock.restart();
 
-		time = time / 800;  // здесь регулируем скорость игры
+		time = time / 800;  
 
 		if (time > 40) time = 40;
 
@@ -197,6 +167,7 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 		if (Keyboard::isKeyPressed(Keyboard::LShift)) p.key["Shift"] = true;
 		if (Keyboard::isKeyPressed(Keyboard::A)) p.key["A"] = true;
 		if (Keyboard::isKeyPressed(Keyboard::D)) p.key["D"] = true;
+		if (Keyboard::isKeyPressed(Keyboard::W)) p.key["W"] = true;
 
 
 		for (it = entities.begin(); it != entities.end();)
@@ -210,7 +181,7 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 			RunGame(window, numberLevel);
 			return false;
 		}
-		for (it = entities.begin(); it != entities.end(); it++)//проходимся по эл-там списка
+		for (it = entities.begin(); it != entities.end(); it++)
 		{
 
 			if ((*it)->life == false)
@@ -220,9 +191,9 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 				delete b;
 			}
 
-			if ((*it)->getRect().intersects(p.getRect()))//если прямоугольник спрайта объекта пересекается с игроком
+			if ((*it)->getRect().intersects(p.getRect()))
 			{
-				if ((*it)->Name == "EasyEnemy") {//и при этом имя объекта EasyEnemy,то..
+				if ((*it)->Name == "EasyEnemy") {
 
 					if ((p.y - 1 < (*it)->y) && (p.dy >0))
 					{
@@ -232,15 +203,15 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 							killSound.play();
 							(*it)->isDead = true;
 						}
-					}//если прыгнули на врага,то даем врагу скорость 0,отпрыгиваем от него чуть вверх,даем ему здоровье 0
+					}
 					else
-					{//иначе враг подошел к нам сбоку и нанес урон
-						if ((*it)->dx < 0)//если враг идет вправо
+					{
+						if ((*it)->dx < 0)
 						{
 							(*it)->dx = 0;
 							p.isDead = true;
 						}
-						if ((*it)->dx > 0)//если враг идет влево
+						if ((*it)->dx > 0)
 						{
 							(*it)->dx = 0;
 							p.isDead = true;
@@ -248,27 +219,27 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 					}
 				}
 			}
-			if ((((*it)->Name == "MovingPlatform") || (((*it)->Name == "MovingPlatformY"))) && ((*it)->getRect().intersects(p.getRect())))//если игрок столкнулся с объектом списка и имя этого объекта movingplatform
+			if ((((*it)->Name == "MovingPlatform") || (((*it)->Name == "MovingPlatformY"))) && ((*it)->getRect().intersects(p.getRect())))
 			{
 				Entity *movPlat = *it;
-				if (p.dy>0)//при этом игрок находится в состоянии после прыжка, т.е падает вниз
-					if (p.y + p.h<movPlat->y + movPlat->h)//если игрок находится выше платформы, т.е это его ноги минимум (тк мы уже проверяли что он столкнулся с платформой)
+				if (p.dy>0)
+					if (p.y + p.h<movPlat->y + movPlat->h)
 					{
-						p.y = movPlat->y - p.h + 3; p.x += movPlat->dx*time; p.dy = 0; p.STATE = Player::stay; // то выталкиваем игрока так, чтобы он как бы стоял на платформе
+						p.y = movPlat->y - p.h + 3; p.x += movPlat->dx*time; p.dy = 0; p.STATE = Player::stay; 
 					}
 			}
-			if (((*it)->Name == "NextLevel") && ((*it)->getRect().intersects(p.getRect())))//дверь на следующий уровень
+			if (((*it)->Name == "NextLevel") && ((*it)->getRect().intersects(p.getRect())))
 			{
 				numberLevel++;
-				std::ofstream fout("res/utilityx86.txt", std::ios_base::trunc);
+				std::ofstream fout("res/save.txt", std::ios_base::trunc);
 				fout.close();
-				fout.open("res/utilityx86.txt", std::ios_base::out);
+				fout.open("res/save.txt", std::ios_base::out);
 				fout << numberLevel;
 				fout.close();
 
-				std::ofstream fout2("res/utilityx64.txt", std::ios_base::trunc);
+				std::ofstream fout2("res/save.txt", std::ios_base::trunc);
 				fout2.close();
-				fout2.open("res/utilityx64.txt", std::ios_base::out);
+				fout2.open("res/save.txt", std::ios_base::out);
 				fout2 << p.cash;
 				fout2.close();
 
@@ -278,14 +249,14 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 			{
 				p.isDead = true;
 			}
-			if (((*it)->Name == "Spikes") && ((*it)->getRect().intersects(p.getRect())))//встретил шипы
+			if (((*it)->Name == "Spikes") && ((*it)->getRect().intersects(p.getRect())))
 			{
 				if ((p.x - ((*it)->x)) <= -1.5 || (p.x - ((*it)->x)) >= 1.5)
 				{
 					p.isDead = true;
 				}
 			}
-			if (((*it)->Name == "Coin") && ((*it)->getRect().intersects(p.getRect())))//встретил шипы
+			if (((*it)->Name == "Coin") && ((*it)->getRect().intersects(p.getRect())))
 			{
 				if ((*it)->isDead != true)
 				{
@@ -296,10 +267,10 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 			}
 			for (it2 = entities.begin(); it2 != entities.end(); it2++)
 			{
-				if ((*it)->getRect() != (*it2)->getRect())//при этом это должны быть разные прямоугольники
-					if (((*it)->getRect().intersects((*it2)->getRect())) && ((*it)->Name == "EasyEnemy") && ((*it2)->Name == "EasyEnemy"))//если столкнулись два объекта и они враги
+				if ((*it)->getRect() != (*it2)->getRect())
+					if (((*it)->getRect().intersects((*it2)->getRect())) && ((*it)->Name == "EasyEnemy") && ((*it2)->Name == "EasyEnemy"))
 					{
-						(*it)->dx *= -1;//меняем направление движения врага
+						(*it)->dx *= -1;
 						if ((*it)->dx < 0)
 							(*it)->anim.set("moveLeft");
 						if ((*it)->dx > 0)
@@ -315,7 +286,6 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }
 		p.update(time);
-		/////////////////////отображаем на экран////////////////////
 		view.setCenter(p.x, p.y);
 		window.setView(view);
 
@@ -333,10 +303,18 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 
 		p.draw(window);
 
-		std::ostringstream playerCash;    // объявили переменную
-		playerCash << p.cash;		//занесли в нее число очков, то есть формируем строку
-		text.setString("COINS " + playerCash.str());//задаем строку тексту и вызываем сформированную выше строку методом .str() 
-		text.setPosition(view.getCenter().x + 215, view.getCenter().y - 240);//задаем позицию текста, центр камеры
+		std::ostringstream playerCash;  
+		playerCash << p.cash;		
+		text.setString("COINS " + playerCash.str());
+		text.setPosition(view.getCenter().x + 215, view.getCenter().y - 240);
+
+		window.draw(text);
+
+		std::ostringstream playerLife;   
+		playerLife << 3;		
+		text.setString("LIFE " + playerLife.str());
+		text.setPosition(view.getCenter().x -315, view.getCenter().y - 240);
+
 		window.draw(text);
 
 		window.display();
