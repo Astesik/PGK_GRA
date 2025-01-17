@@ -25,7 +25,7 @@ void Player::Keyboard()
 		if (key["Shift"]) dx = 0.15;
 		if (STATE == stay) STATE = walk;
 	}
-	if (key["Space"])
+	if (key["Space"] || key["W"])
 	{
 		if (STATE == stay || STATE == walk) { dy = -0.3; STATE = jump; anim.play("jump"); }
 	}
@@ -36,7 +36,7 @@ void Player::Keyboard()
 		if (STATE == walk) STATE = stay;
 	}
 
-	key["R"] = key["L"] = key["Space"] = key["Shift"] = key["A"] = key["D"] = false;
+	key["R"] = key["L"] = key["Space"] = key["Shift"] = key["A"] = key["D"] = key["W"] =  false;
 }
 
 void Player::Animation(float time)
