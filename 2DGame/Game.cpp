@@ -1,4 +1,4 @@
-#include "Game.hpp"
+﻿#include "Game.hpp"
 
 float CheckX = 0, CheckY = 0;
 bool RunGame(RenderWindow &window, int &numberLevel)
@@ -253,7 +253,7 @@ bool RunGame(RenderWindow &window, int &numberLevel)
 			}
 			if (((*it)->Name == "Spikes") && ((*it)->getRect().intersects(p.getRect())))
 			{
-				if ((p.x - ((*it)->x)) <= -1.5 || (p.x - ((*it)->x)) >= 1.5)
+				if ((p.x - ((*it)->x)) <= -5 || (p.x - ((*it)->x)) >= 5)
 				{
 					if (p.lifeCooldown <= 0.0f) {
 						p.minusLife(); p.lifeCooldown = 400;

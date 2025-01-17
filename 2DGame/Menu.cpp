@@ -143,15 +143,12 @@ void text(sf::RenderWindow & window, int &numberLevel)
 	musicText.setLoop(true);
 	musicText.setVolume(50);
 
-	Texture oneTexture, twoTexture, threeTexture, fourTexture, fiveTexture, sixTexture, sevenTexture;
+	Texture oneTexture, twoTexture, threeTexture;
 	oneTexture.loadFromFile("res/images/1.png");
 	twoTexture.loadFromFile("res/images/2.png");
 	threeTexture.loadFromFile("res/images/3.png");
-	fourTexture.loadFromFile("res/images/4.png");
-	fiveTexture.loadFromFile("res/images/5.png");
-	sixTexture.loadFromFile("res/images/6.png");
-	sevenTexture.loadFromFile("res/images/7.png");
-	Sprite one(oneTexture), two(twoTexture), three(threeTexture), four(fourTexture), five(fiveTexture), six(sixTexture), seven(sevenTexture);
+
+	Sprite one(oneTexture), two(twoTexture), three(threeTexture);
 
 	bool isMenu = 1;
 
